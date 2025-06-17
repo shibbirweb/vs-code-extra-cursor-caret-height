@@ -48,7 +48,7 @@ If you run the command again, it will:
 
 When the extension is deactivated or uninstalled, it:
 
-* Automatically reverts the patch
+* Please reset heigh using command `Extra Cursor Height: Reset Height` before uninstall or deactivate.
 
 ---
 
