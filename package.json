@@ -2,20 +2,38 @@
   "name": "extra-cursor-caret-height",
   "displayName": "Extra Cursor Caret Height",
   "description": "Add extra cursor caret heigh for better visibility",
-  "version": "0.0.1",
+  "version": "1.0.0",
+  "publisher": "shibbirweb",
+  "license": "MIT",
+  "author": {
+    "name": "MD. Shibbir Ahmed",
+    "email": "shibbirweb@gmail.com",
+    "url": "https://shibbirweb.github.io"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shibbirweb/vs-code-extra-cursor-caret-height"
+  },
   "engines": {
     "vscode": "^1.101.0"
   },
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onCommand:extra-cursor-caret-height.applyExtraHeight",
+    "onCommand:extra-cursor-caret-height.resetExtraHeight"
+  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "extra-cursor-caret-height.helloWorld",
-        "title": "Hello World"
+        "command": "extra-cursor-caret-height.applyExtraHeight",
+        "title": "Extra Cursor Height: Apply Height"
+      },
+      {
+        "command": "extra-cursor-caret-height.resetExtraHeight",
+        "title": "Extra Cursor Height: Reset Height"
       }
     ]
   },
