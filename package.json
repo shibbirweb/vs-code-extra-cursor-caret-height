@@ -20,6 +20,13 @@
   "categories": [
     "Other"
   ],
+  "keywords": [
+    "cursor",
+    "caret",
+    "height",
+    "visibility",
+    "accessibility"
+  ],
   "activationEvents": [
     "onCommand:extra-cursor-caret-height.applyExtraHeight",
     "onCommand:extra-cursor-caret-height.resetExtraHeight"
