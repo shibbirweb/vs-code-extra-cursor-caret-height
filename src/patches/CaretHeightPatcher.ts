@@ -23,7 +23,7 @@ export class CaretHeightPatcher {
 
     if (this.isPatched(content)) {
       vscode.window.showInformationMessage(
-        "Caret height patch is already applied. Replacing with new height..."
+        "Extra cursor caret height patch is already applied. Replacing with new height..."
       );
       content = this.removePatch(content);
     }
@@ -42,7 +42,7 @@ export class CaretHeightPatcher {
 
     vscode.window
       .showInformationMessage(
-        `Caret height patch applied with total height ${totalHeight}px. Please exit Editor and open it again to see changes.`
+        `Extra cursor caret height patch applied with total height ${totalHeight}px. Please exit Editor and open it again to see changes.`
       );
   }
 
@@ -55,12 +55,7 @@ export class CaretHeightPatcher {
     fs.writeFileSync(cssPath, content, "utf8");
 
     vscode.window
-      .showInformationMessage(`Extra cursor height is reset.`, "Reload VS Code")
-      .then((selection) => {
-        if (selection === "Reload VS Code") {
-          vscode.commands.executeCommand("workbench.action.reloadWindow");
-        }
-      });
+      .showInformationMessage(`Extra cursor caret height is reset. Please close editor and reopen it to see changes.`);
   }
 
   private generateSnippet(totalHeight: number): string {
@@ -99,6 +94,8 @@ ${CaretHeightPatcher.SNIPPET_COMMENT_END}
   }
 
   private getMainCssPath(): string | null {
+    const appRoot = vscode.env.appRoot; // e.g., /Applications/Visual Studio Code.app/Contents/Resources/app
+    return path.join(appRoot, "out", "vs", "workbench", "workbench.desktop.main.css");
     const execPath = process.execPath;
     const platform = os.platform();
 
