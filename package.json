@@ -2,13 +2,16 @@
   "name": "extra-cursor-caret-height",
   "displayName": "Extra Cursor Caret Height",
   "description": "Add extra cursor caret heigh for better visibility",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "publisher": "shibbirweb",
   "license": "MIT",
   "author": {
     "name": "MD. Shibbir Ahmed",
     "email": "shibbirweb@gmail.com",
     "url": "https://shibbirweb.github.io"
+  },
+  "sponsor": {
+    "url": "https://buymeacoffee.com/shibbirweb"
   },
   "repository": {
     "type": "git",
