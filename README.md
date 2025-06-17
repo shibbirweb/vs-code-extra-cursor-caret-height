@@ -4,6 +4,14 @@ Make your cursor easier to see by increasing the caret (text cursor) height in V
 
 ---
 
+## Extension Marketplace
+
+You can find and install the **Extra Cursor Caret Height** extension from the Visual Studio Code Marketplace here:
+
+[Extra Cursor Caret Height - VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=shibbirweb.extra-cursor-caret-height)
+
+---
+
 ### ✨ Features
 
 * 🔼 Adds extra height to the blinking text cursor (caret).
