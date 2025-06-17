@@ -30,7 +30,7 @@ You can find and install the **Extra Cursor Caret Height** extension from the Vi
 ### 🛠️ Usage
 
 1. Open the Command Palette (`Ctrl+Shift+P` or `Cmd+Shift+P`).
-2. Search for `Extra Cursor Height: Apply Height`.
+2. Search for `Extra Cursor Caret Height: Apply Height`.
 3. Enter the desired height in pixels (e.g., `30`).
 4. Exit the editor and reopen editor to see the changes.
 
@@ -38,7 +38,7 @@ You can find and install the **Extra Cursor Caret Height** extension from the Vi
 
 ## Reset Height
 
-1. To reset the height you can use the command: `Extra Cursor Height: Reset Height`
+1. To reset the height you can use the command: `Extra Cursor Caret Height: Reset Height`
 2. Exit the editor and reopen editor to see the changes.
 
 ---
@@ -56,7 +56,7 @@ If you run the command again, it will:
 
 When the extension is deactivated or uninstalled, it:
 
-* Please reset heigh using command `Extra Cursor Height: Reset Height` before uninstall or deactivate.
+* Please reset heigh using command `Extra Cursor Caret Height: Reset Height` before uninstall or deactivate.
 
 ---
 
