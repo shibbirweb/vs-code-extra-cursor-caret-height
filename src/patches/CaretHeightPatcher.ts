@@ -42,14 +42,8 @@ export class CaretHeightPatcher {
 
     vscode.window
       .showInformationMessage(
-        `Caret height patch applied with total height ${totalHeight}px.`,
-        "Reload VS Code"
-      )
-      .then((selection) => {
-        if (selection === "Reload VS Code") {
-          vscode.commands.executeCommand("workbench.action.reloadWindow");
-        }
-      });
+        `Caret height patch applied with total height ${totalHeight}px. Please exit Editor and open it again to see changes.`
+      );
   }
 
   public revertPatch(): void {

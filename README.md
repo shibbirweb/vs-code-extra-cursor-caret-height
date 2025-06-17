@@ -24,13 +24,14 @@ Make your cursor easier to see by increasing the caret (text cursor) height in V
 1. Open the Command Palette (`Ctrl+Shift+P` or `Cmd+Shift+P`).
 2. Search for `Extra Cursor Height: Apply Height`.
 3. Enter the desired height in pixels (e.g., `30`).
-4. Click `Reload VS Code` when prompted.
+4. Exit the editor and reopen editor to see the changes.
 
 ✅ The new height will be applied after reload.
 
 ## Reset Height
 
-To reset the height you can use the command: `Extra Cursor Height: Reset Height`
+1. To reset the height you can use the command: `Extra Cursor Height: Reset Height`
+2. Exit the editor and reopen editor to see the changes.
 
 ---
 

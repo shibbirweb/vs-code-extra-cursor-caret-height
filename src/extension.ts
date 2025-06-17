@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { Command } from "./commands/Command";
-import { CaretHeightPatcher } from "./patches/CaretHeightPatcher";
+// import { CaretHeightPatcher } from "./patches/CaretHeightPatcher";
 
 export function activate(context: vscode.ExtensionContext) {
   const command = new Command();
@@ -10,6 +10,6 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 export function deactivate() {
-  const patcher = new CaretHeightPatcher();
-  patcher.revertPatch();
+  // const patcher = new CaretHeightPatcher();
+  // patcher.revertPatch();
 }
