@@ -47,6 +47,8 @@ You can clearly see the difference between the default caret height and the enha
 3. Enter the desired height in pixels (e.g., `30`).
 4. Exit the editor and reopen editor to see the changes.
 
+![Tutorial](docs/assets/images/apply-patch.gif)
+
 ✅ The new height will be applied after reload.
 
 ## Reset Height
@@ -74,6 +76,8 @@ When the extension is deactivated or uninstalled, it:
 ---
 
 ### ⚠️ Disclaimer
+
+>**Note:** It is **not recommended** to use it with `"editor.cursorStyle": "underline"` or `"underlineThin"`, as these styles are not visually compatible with the caret height adjustment.
 
 This extension modifies the internal file:
 
