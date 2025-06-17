@@ -54,7 +54,7 @@ export class CaretHeightPatcher {
 
   public revertPatch(): void {
     const cssPath = this.getMainCssPath();
-    if (!cssPath || !fs.existsSync(cssPath)) return;
+    if (!cssPath || !fs.existsSync(cssPath)) {return;}
 
     let content = fs.readFileSync(cssPath, "utf8");
     content = this.removePatch(content);

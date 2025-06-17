@@ -13,9 +13,9 @@ export class Command {
           placeHolder: "30",
           value: "30",
           validateInput: (value) => {
-            if (!value) return "Please enter a value";
+            if (!value) {return "Please enter a value";}
             const n = Number(value);
-            if (isNaN(n) || n <= 0) return "Please enter a valid positive number";
+            if (isNaN(n) || n <= 0) {return "Please enter a valid positive number";}
             return null;
           },
         });
