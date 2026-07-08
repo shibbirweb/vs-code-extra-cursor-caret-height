@@ -9,3 +9,14 @@ vsc-extension-quickstart.md
 **/*.map
 **/*.ts
 **/.vscode-test.*
+# The extension ships as a single esbuild bundle (out/extension.js); the other
+# out/ files are unbundled tsc output used only for dev/tests.
+out/test/**
+out/commands/**
+out/patches/**
+.github/**
+.claude/**
+CLAUDE.md
+pnpm-lock.yaml
+pnpm-workspace.yaml
+.npmrc

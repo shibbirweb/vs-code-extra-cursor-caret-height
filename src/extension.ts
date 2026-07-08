@@ -5,8 +5,13 @@ import { Command } from "./commands/Command";
 export function activate(context: vscode.ExtensionContext) {
   const command = new Command();
 
-  const disposables = command.getCommands();
-  context.subscriptions.push(...disposables);
+  context.subscriptions.push(...command.getCommands());
+
+  // Apply/revert automatically when the height setting changes (Settings UI).
+  context.subscriptions.push(command.registerConfigWatcher());
+
+  // Detect an update that wiped the on-disk patch and offer to re-apply.
+  void command.checkAndPromptReapply();
 }
 
 export function deactivate() {
