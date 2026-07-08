@@ -45,16 +45,18 @@ You can clearly see the difference between the default caret height and the enha
 1. Open the Command Palette (`Ctrl+Shift+P` or `Cmd+Shift+P`).
 2. Search for `Extra Cursor Caret Height: Apply Height`.
 3. Enter the desired height in pixels (e.g., `30`).
-4. Exit the editor and reopen editor to see the changes.
+4. Click **Reload Window** on the confirmation prompt (or run `Developer: Reload Window`) to see the changes.
 
 ![Tutorial](docs/assets/images/apply-patch.gif)
 
-✅ The new height will be applied after reload.
+✅ The new height is applied after the window reloads — no full restart needed.
+
+> If VS Code cannot write to its own install directory (e.g. a root-owned `.deb`/`.rpm` or Program Files install), it will offer **Retry with Admin/Sudo** and prompt for elevated permissions. Read-only installs such as Linux **Snap** (`/snap/code/...`) cannot be patched.
 
 ## Reset Height
 
 1. To reset the height you can use the command: `Extra Cursor Caret Height: Reset Height`
-2. Exit the editor and reopen editor to see the changes.
+2. Click **Reload Window** on the confirmation prompt to see the changes.
 
 ---
 
@@ -82,10 +84,10 @@ When the extension is deactivated or uninstalled, it:
 This extension modifies the internal file:
 
 ```
-workbench.desktop.main.css
+workbench.desktop.main.js
 ```
 
-> Use with caution. If VS Code updates, the patch may be lost or reset.
+> Use with caution. If VS Code updates, it replaces this file and the patch is lost. On the next launch the extension detects this and offers to re-apply your last height automatically.
 
 Additionally, after the patch is applied, VS Code may show a warning:
 > ⚠️ *"Your installation appears to be corrupted."*
