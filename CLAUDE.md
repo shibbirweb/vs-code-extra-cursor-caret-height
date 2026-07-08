@@ -67,6 +67,12 @@ If your VS Code is a **Snap** install, you cannot patch it (read-only). To exerc
 
 Then Apply → Reload Window (caret grows). To test the update-recovery popup, strip the snippet block from `workbench.desktop.main.js` (`sed -i '/caret-height start/,/caret-height end/d' <file>`) — do NOT run Reset (it clears globalState) — then reload the window.
 
+## Compatibility
+
+- `engines.vscode` is `^1.60.0` — a broad floor so it installs on older VS Code and on forks (Cursor, Windsurf, VSCodium…), which all report a `1.x` engine. `@types/vscode` is pinned to the same `1.60` so newer APIs can't be used unnoticed; if you must raise the floor, bump both together. Only ancient/stable APIs are used (`env.appRoot`, `globalState`, `showInputBox`, `showInformationMessage`, `commands`, the `onStartupFinished`/`onCommand` activation events).
+- Because the engine is `< 1.74`, the `onStartupFinished` and `onCommand:*` entries in `activationEvents` are required (older VS Code does not auto-generate them from contributions) — don't remove them.
+- Forks resolve their own install dir via `vscode.env.appRoot`, so path handling already works across them. Distribution to forks is via **OpenVSX** (+ sideloading the `.vsix`), not the MS Marketplace.
+
 ## Constraints
 
 - No config settings contributed — height is per-invocation input only.
