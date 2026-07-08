@@ -4,6 +4,7 @@
   "description": "Add extra cursor caret height for better visibility",
   "version": "1.2.0",
   "publisher": "shibbirweb",
+  "packageManager": "pnpm@11.9.0",
   "license": "MIT",
   "author": {
     "name": "MD. Shibbir Ahmed",
