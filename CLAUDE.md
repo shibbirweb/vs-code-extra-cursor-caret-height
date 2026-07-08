@@ -35,15 +35,27 @@ There is a **runtime dependency** (`@vscode/sudo-prompt`), but `package`/`publis
 
 Three-layer flow, entry to disk:
 
-1. [src/extension.ts](src/extension.ts) — `activate()` instantiates `Command(context)`, registers its disposables, then fires `command.checkAndPromptReapply()` (fire-and-forget). `deactivate()` is a no-op (patch persists until user runs Reset).
-2. [src/commands/Command.ts](src/commands/Command.ts) — registers the two contributed commands (`applyExtraHeight`, `resetExtraHeight`), persists the applied height in `context.globalState` (key `extra-cursor-caret-height.appliedHeight`), and owns `checkAndPromptReapply()`.
+1. [src/extension.ts](src/extension.ts) — `activate()` instantiates `Command`, registers its disposables + the config watcher, then fires `command.checkAndPromptReapply()` (fire-and-forget). `deactivate()` is a no-op (patch persists until disabled).
+2. [src/commands/Command.ts](src/commands/Command.ts) — registers the two contributed commands (`applyExtraHeight`, `resetExtraHeight`), owns the settings watcher and `checkAndPromptReapply()`. **Settings are the single source of truth** (see below); the commands and the Settings UI both just write those settings.
 3. [src/patches/CaretHeightPatcher.ts](src/patches/CaretHeightPatcher.ts) — the real work. Reads/writes `workbench.desktop.main.js` with `fs`, with an elevated-write fallback.
 
-Command IDs/titles live in **two** places that must stay in sync: `contributes.commands` (+ `activationEvents`) in package.json, and the `registerCommand` strings in Command.ts. `activationEvents` includes `onStartupFinished` so the update-detection check runs at launch.
+Command IDs/titles live in **two** places that must stay in sync: `contributes.commands` (+ `activationEvents`) in package.json, and the `registerCommand` strings in Command.ts. `activationEvents` includes `onStartupFinished` so the config watcher + update-detection run at launch.
+
+## Configuration (source of truth)
+
+Two settings under `contributes.configuration` drive everything:
+
+- `extraCursorCaretHeight.enabled` (boolean, default `false`) — master on/off.
+- `extraCursorCaretHeight.height` (number, default `30`, min `1`) — total extra px.
+
+Active height = `enabled ? height : 0`. `enabled` defaults **off** on purpose: a numeric default alone must never auto-patch VS Code's internals (that writes to the install dir and triggers the "corrupted" warning) or nag the recovery popup on a fresh install. Settings live in the user's `settings.json`, so they **survive VS Code updates** — this is what the recovery popup keys off (no `globalState` anymore).
+
+- **Command flow**: `applyExtraHeight` writes `height` then sets `enabled=true`; `resetExtraHeight` sets `enabled=false`. They do not patch directly.
+- **Watcher** (`registerConfigWatcher`): `onDidChangeConfiguration` for the section → debounced (~800ms, so typing a multi-digit height in Settings yields one patch/reload) → `syncFromConfig()` applies (active height > 0) or reverts (only if currently patched). The debounce is why command flows set two keys without double-applying.
 
 ## Key behaviors
 
-- **Update-recovery popup**: a VS Code update overwrites the bundled JS and silently wipes the patch. On activate, if a saved height exists in `globalState` but the file is no longer patched (`isCurrentlyPatched()` false while `patchFileExists()` true), the extension prompts "Re-apply Npx?" with an Apply button. Reset clears the saved height so the user isn't nagged after an intentional reset.
+- **Update-recovery popup**: a VS Code update overwrites the bundled JS and silently wipes the patch. On activate, if the active height > 0 but the file is no longer patched (`isCurrentlyPatched()` false while `patchFileExists()` true), the extension prompts "Re-apply Npx?" with an Apply button. Disabling (`enabled=false`) means no nag.
 - **Reload prompt**: apply/reset/re-apply show a message with a **Reload Window** button (`workbench.action.reloadWindow`). Because the patch is JS that re-runs per window load, reload is sufficient — no full restart.
 - **Elevated write**: `saveContent()` tries `fs.writeFileSync`; on a permission error it offers "Retry with Admin/Sudo" and, via `@vscode/sudo-prompt`, writes a temp file then `mv -f`/`move` into place with elevation. Helps root-owned installs (`.deb`/`.rpm`, Program Files). **Cannot** help read-only installs — notably Linux **Snap** (`/snap/code/...` squashfs), where even root cannot write; that install type is unsupported.
 
@@ -75,5 +87,4 @@ Then Apply → Reload Window (caret grows). To test the update-recovery popup, s
 
 ## Constraints
 
-- No config settings contributed — height is per-invocation input only.
 - `strict` TS is on; target ES2022 / module Node16.

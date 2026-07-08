@@ -1,22 +1,37 @@
 import * as vscode from "vscode";
 import { CaretHeightPatcher } from "../patches/CaretHeightPatcher";
 
+const CONFIG_SECTION = "extraCursorCaretHeight";
+const ENABLED_KEY = "enabled";
+const HEIGHT_KEY = "height";
+const DEFAULT_HEIGHT = 30;
+
 export class Command {
-  private static readonly STORAGE_KEY =
-    "extra-cursor-caret-height.appliedHeight";
-
   private patcher = new CaretHeightPatcher();
+  private syncTimer?: ReturnType<typeof setTimeout>;
 
-  constructor(private readonly context: vscode.ExtensionContext) {}
+  private getConfig(): vscode.WorkspaceConfiguration {
+    return vscode.workspace.getConfiguration(CONFIG_SECTION);
+  }
+
+  /** Effective height in px when enabled, otherwise 0. */
+  private getActiveHeight(): number {
+    const cfg = this.getConfig();
+    const enabled = cfg.get<boolean>(ENABLED_KEY, false);
+    const height = cfg.get<number>(HEIGHT_KEY, DEFAULT_HEIGHT);
+    return enabled && typeof height === "number" && height > 0 ? height : 0;
+  }
 
   public getCommands(): vscode.Disposable[] {
     const applyExtraHeightCommand = vscode.commands.registerCommand(
       "extra-cursor-caret-height.applyExtraHeight",
       async () => {
+        const cfg = this.getConfig();
+        const current = cfg.get<number>(HEIGHT_KEY, DEFAULT_HEIGHT);
         const input = await vscode.window.showInputBox({
           prompt: "Enter total extra cursor height in pixels (e.g. 30)",
-          placeHolder: "30",
-          value: "30",
+          placeHolder: String(DEFAULT_HEIGHT),
+          value: String(current > 0 ? current : DEFAULT_HEIGHT),
           validateInput: (value) => {
             if (!value) {return "Please enter a value";}
             const n = Number(value);
@@ -30,48 +45,80 @@ export class Command {
           return;
         }
 
-        const totalHeight = Number(input);
-        const applied = await this.patcher.applyPatch(totalHeight);
-        if (applied) {
-          await this.context.globalState.update(
-            Command.STORAGE_KEY,
-            totalHeight
-          );
-        }
+        // Update the settings; the debounced watcher applies the patch. Update
+        // height first so it is in place when `enabled` flips on.
+        await cfg.update(HEIGHT_KEY, Number(input), vscode.ConfigurationTarget.Global);
+        await cfg.update(ENABLED_KEY, true, vscode.ConfigurationTarget.Global);
       }
     );
 
     const resetExtraHeightCommand = vscode.commands.registerCommand(
       "extra-cursor-caret-height.resetExtraHeight",
       async () => {
-        await this.patcher.revertPatch();
-        await this.context.globalState.update(Command.STORAGE_KEY, undefined);
+        await this.getConfig().update(
+          ENABLED_KEY,
+          false,
+          vscode.ConfigurationTarget.Global
+        );
       }
     );
 
     return [applyExtraHeightCommand, resetExtraHeightCommand];
   }
 
+  /**
+   * Apply/revert automatically when either setting changes (e.g. from the
+   * Settings UI). Debounced so toggling `enabled` and `height` together runs a
+   * single patch pass with one reload prompt.
+   */
+  public registerConfigWatcher(): vscode.Disposable {
+    return vscode.workspace.onDidChangeConfiguration((e) => {
+      if (!e.affectsConfiguration(CONFIG_SECTION)) {
+        return;
+      }
+      // Debounce so typing a multi-digit height in the Settings UI (which
+      // commits on each change) results in a single patch + reload prompt.
+      if (this.syncTimer) {
+        clearTimeout(this.syncTimer);
+      }
+      this.syncTimer = setTimeout(() => void this.syncFromConfig(), 800);
+    });
+  }
+
+  private async syncFromConfig(): Promise<void> {
+    const height = this.getActiveHeight();
+    if (height > 0) {
+      await this.patcher.applyPatch(height);
+    } else if (this.patcher.isCurrentlyPatched()) {
+      await this.patcher.revertPatch();
+    }
+  }
+
+  /**
+   * On startup, if the patch is enabled but the workbench script is no longer
+   * patched (e.g. a VS Code update overwrote it), offer to re-apply. Settings
+   * live in the user's settings.json, so they survive updates.
+   */
   public async checkAndPromptReapply(): Promise<void> {
-    const saved = this.context.globalState.get<number>(Command.STORAGE_KEY);
-    if (!saved || saved <= 0) {
+    const height = this.getActiveHeight();
+    if (height <= 0) {
       return;
     }
 
-    // Only prompt when the target CSS exists but no longer carries the patch —
-    // i.e. a VS Code update wiped it. Skip when the file is absent (remote/web).
+    // Only prompt when the target file exists but no longer carries the patch.
+    // Skip when the file is absent (remote/web) or the patch is still present.
     if (!this.patcher.patchFileExists() || this.patcher.isCurrentlyPatched()) {
       return;
     }
 
     const choice = await vscode.window.showInformationMessage(
-      `Extra cursor caret height patch was lost after a VS Code update. Re-apply ${saved}px?`,
+      `Extra cursor caret height patch was lost after a VS Code update. Re-apply ${height}px?`,
       "Apply",
       "Dismiss"
     );
 
     if (choice === "Apply") {
-      await this.patcher.applyPatch(saved);
+      await this.patcher.applyPatch(height);
     }
   }
 }

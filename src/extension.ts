@@ -3,12 +3,14 @@ import { Command } from "./commands/Command";
 // import { CaretHeightPatcher } from "./patches/CaretHeightPatcher";
 
 export function activate(context: vscode.ExtensionContext) {
-  const command = new Command(context);
+  const command = new Command();
 
-  const disposables = command.getCommands();
-  context.subscriptions.push(...disposables);
+  context.subscriptions.push(...command.getCommands());
 
-  // Detect an update that wiped the on-disk CSS patch and offer to re-apply.
+  // Apply/revert automatically when the height setting changes (Settings UI).
+  context.subscriptions.push(command.registerConfigWatcher());
+
+  // Detect an update that wiped the on-disk patch and offer to re-apply.
   void command.checkAndPromptReapply();
 }
 
