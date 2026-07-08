@@ -88,8 +88,10 @@
     "@typescript-eslint/parser": "^8.31.1",
     "@vscode/test-cli": "^0.0.10",
     "@vscode/test-electron": "^2.5.2",
+    "@vscode/vsce": "^3.9.2",
     "esbuild": "^0.28.1",
     "eslint": "^9.25.1",
+    "ovsx": "^1.0.2",
     "typescript": "^5.8.3"
   },
   "dependencies": {
