@@ -50,6 +50,12 @@ jobs:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
         run: pnpm exec vsce publish --no-dependencies --packagePath "extra-cursor-caret-height-${TAG}.vsix"
 
+      - name: Ensure Open VSX namespace
+        if: ${{ env.OVSX_PAT != '' }}
+        # First publish for a publisher requires the namespace to exist; ignore
+        # the error on later runs when it already does.
+        run: pnpm exec ovsx create-namespace shibbirweb -p "$OVSX_PAT" || true
+
       - name: Publish to Open VSX
         if: ${{ env.OVSX_PAT != '' }}
         run: pnpm exec ovsx publish "extra-cursor-caret-height-${TAG}.vsix" -p "$OVSX_PAT"

@@ -4,6 +4,11 @@ All notable changes to the "extra-cursor-caret-height" extension will be documen
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.2.1]
+
+- Publish to **Open VSX** for VS Code forks (Cursor, Windsurf, VSCodium); the release pipeline now creates the publisher namespace automatically.
+- No functional changes to the extension since 1.2.0.
+
 ## [1.2.0]
 
 - Configure the caret height from the **Settings UI** (`extraCursorCaretHeight.enabled` + `extraCursorCaretHeight.height`), in addition to the Command Palette.
