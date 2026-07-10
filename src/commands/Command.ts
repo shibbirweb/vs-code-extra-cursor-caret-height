@@ -119,6 +119,29 @@ export class Command {
   }
 
   /**
+   * On the very first activation after install, run the Apply flow so the user
+   * can set a height right away without hunting through Settings or the Command
+   * Palette. Keyed off `globalState` (install-detection only — settings remain
+   * the source of truth). Fires at most once, and only on a patchable desktop
+   * install (skips remote/web where the workbench script is absent).
+   */
+  public async promptFirstRunSetup(
+    context: vscode.ExtensionContext
+  ): Promise<void> {
+    const FIRST_RUN_KEY = "hasRunFirstSetup";
+    if (context.globalState.get<boolean>(FIRST_RUN_KEY)) {
+      return;
+    }
+    if (!this.patcher.patchFileExists()) {
+      return;
+    }
+    await context.globalState.update(FIRST_RUN_KEY, true);
+    await vscode.commands.executeCommand(
+      "extra-cursor-caret-height.applyExtraHeight"
+    );
+  }
+
+  /**
    * On startup, if the patch is enabled but the workbench script is no longer
    * patched (e.g. a VS Code update overwrote it), offer to re-apply. Settings
    * live in the user's settings.json, so they survive updates.

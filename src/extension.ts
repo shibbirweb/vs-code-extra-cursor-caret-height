@@ -12,6 +12,10 @@ export function activate(context: vscode.ExtensionContext) {
 
   // Detect an update that wiped the on-disk patch and offer to re-apply.
   void command.checkAndPromptReapply();
+
+  // First install: run the Apply flow so the user can set a height without
+  // hunting through Settings or the Command Palette.
+  void command.promptFirstRunSetup(context);
 }
 
 export function deactivate() {

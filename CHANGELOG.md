@@ -4,6 +4,11 @@ All notable changes to the "extra-cursor-caret-height" extension will be documen
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.4.0] - 2026-07-11
+
+### Added
+- On the first launch after install, the **Apply Height** prompt opens automatically so you can set a caret height without hunting through Settings or the Command Palette (fires once; skipped on remote/web where the workbench script is absent).
+
 ## [1.3.0] - 2026-07-11
 
 ### Changed
