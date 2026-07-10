@@ -15,26 +15,7 @@ You can find and install the **Extra Cursor Caret Height** extension from the Vi
 
 ---
 
-### ✨ Features
-
-* 🔼 Adds extra height to the blinking text cursor (caret).
-* 🎯 Fully customizable — set the exact height in pixels.
-* ⚙️ Configure it right from the **Settings UI** (or the Command Palette).
-* 🔁 Applies on a single **Reload Window** — no full restart needed.
-* 🛟 **Auto-recovery** — a VS Code update wipes the patch; on the next launch the extension offers to re-apply your height.
-* 🔐 Prompts for **Admin/Sudo** when the install directory needs elevated write permission.
-* 🧩 Works on VS Code and its forks (Cursor, Windsurf, VSCodium) and older VS Code versions.
-* 🧼 Clean reset — turn it off and the patch is removed.
-
----
-
 ### 📸 Preview
-
-#### 🔹 Regular Caret
-
-![Regular Caret](docs/assets/images/regular.gif)
-
----
 
 #### 🔸 With Extra Caret Height Enabled
 
@@ -42,7 +23,7 @@ You can find and install the **Extra Cursor Caret Height** extension from the Vi
 
 ---
 
-You can clearly see the difference between the default caret height and the enhanced version provided by the **Extra Cursor Caret Height** extension.
+A taller, more prominent caret provided by the **Extra Cursor Caret Height** extension.
 
 ---
 
@@ -72,6 +53,19 @@ You can clearly see the difference between the default caret height and the enha
 
 1. Turn off **Enabled** in Settings, or run the command `Extra Cursor Caret Height: Reset Height`.
 2. Click **Reload Window** on the confirmation prompt to see the changes.
+
+---
+
+### ✨ Features
+
+* 🔼 Adds extra height to the blinking text cursor (caret).
+* 🎯 Fully customizable — set the exact height in pixels.
+* ⚙️ Configure it right from the **Settings UI** (or the Command Palette).
+* 🔁 Applies on a single **Reload Window** — no full restart needed.
+* 🛟 **Auto-recovery** — a VS Code update wipes the patch; on the next launch the extension offers to re-apply your height.
+* 🔐 Prompts for **Admin/Sudo** when the install directory needs elevated write permission.
+* 🧩 Works on VS Code and its forks (Cursor, Windsurf, VSCodium) and older VS Code versions.
+* 🧼 Clean reset — turn it off and the patch is removed.
 
 ---
 
