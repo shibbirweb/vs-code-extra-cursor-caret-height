@@ -1,5 +1,7 @@
 import * as vscode from "vscode";
+import * as os from "os";
 import { CaretHeightPatcher } from "../patches/CaretHeightPatcher";
+import { resolveSuggestedHeight } from "../utils/suggestedHeight";
 
 const CONFIG_SECTION = "extraCursorCaretHeight";
 const ENABLED_KEY = "enabled";
@@ -12,6 +14,22 @@ export class Command {
 
   private getConfig(): vscode.WorkspaceConfiguration {
     return vscode.workspace.getConfiguration(CONFIG_SECTION);
+  }
+
+  /**
+   * Suggested extra caret height for the Apply prompt: about half the editor's
+   * resolved line height, so the caret grows noticeably without towering over
+   * the text. Mirrors VS Code's own line-height resolution
+   * (`editor.lineHeight` + `editor.fontSize`): 0 => golden-ratio * fontSize,
+   * values < 8 are treated as a multiplier of fontSize, otherwise px.
+   */
+  private computeSuggestedHeight(): number {
+    const editorCfg = vscode.workspace.getConfiguration("editor");
+    return resolveSuggestedHeight(
+      editorCfg.get<number>("fontSize"),
+      editorCfg.get<number>("lineHeight"),
+      os.platform() === "darwin"
+    );
   }
 
   /** Effective height in px when enabled, otherwise 0. */
@@ -27,11 +45,17 @@ export class Command {
       "extra-cursor-caret-height.applyExtraHeight",
       async () => {
         const cfg = this.getConfig();
-        const current = cfg.get<number>(HEIGHT_KEY, DEFAULT_HEIGHT);
+        const suggested = this.computeSuggestedHeight();
+        // Prefer the height the user has explicitly set; otherwise suggest ~half
+        // the editor line height rather than the static package.json default.
+        const inspected = cfg.inspect<number>(HEIGHT_KEY);
+        const userSet = inspected?.globalValue ?? inspected?.workspaceValue;
+        const initial =
+          typeof userSet === "number" && userSet > 0 ? userSet : suggested;
         const input = await vscode.window.showInputBox({
-          prompt: "Enter total extra cursor height in pixels (e.g. 30)",
-          placeHolder: String(DEFAULT_HEIGHT),
-          value: String(current > 0 ? current : DEFAULT_HEIGHT),
+          prompt: `Enter total extra cursor height in pixels (suggested ${suggested}, about half your editor line height)`,
+          placeHolder: String(suggested),
+          value: String(initial),
           validateInput: (value) => {
             if (!value) {return "Please enter a value";}
             const n = Number(value);
