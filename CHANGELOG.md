@@ -6,6 +6,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [1.3.0] - 2026-07-11
 
+### Added
+- On the first launch after install, the **Apply Height** prompt opens automatically so you can set a caret height without hunting through Settings or the Command Palette (fires once; skipped on remote/web where the workbench script is absent).
+
 ### Changed
 - The **Apply Height** prompt now suggests about half the editor's line height (derived from `editor.fontSize`/`editor.lineHeight`) instead of a fixed `30px`, so the caret grows noticeably without towering over the text. A height you have already saved still takes precedence.
 - Restructured the README so regular users see the **Preview** and **Usage** before the technical details; removed the regular-caret screenshot to avoid confusion.
