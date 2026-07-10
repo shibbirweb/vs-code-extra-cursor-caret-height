@@ -4,6 +4,11 @@ All notable changes to the "extra-cursor-caret-height" extension will be documen
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.4.2] - 2026-07-11
+
+### Changed
+- Update the logo of the extension
+
 ## [1.4.1] - 2026-07-11
 
 ### Changed
