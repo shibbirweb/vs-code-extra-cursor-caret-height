@@ -4,6 +4,11 @@ All notable changes to the "extra-cursor-caret-height" extension will be documen
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.4.1] - 2026-07-11
+
+### Changed
+- Point the Open VSX link in the README straight at the extension page (`open-vsx.org/extension/shibbirweb/extra-cursor-caret-height`) so fork users land on the install page directly.
+
 ## [1.4.0] - 2026-07-11
 
 ### Added

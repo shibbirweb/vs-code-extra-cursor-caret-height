@@ -11,7 +11,7 @@ You can find and install the **Extra Cursor Caret Height** extension from the Vi
 
 [Extra Cursor Caret Height - VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=shibbirweb.extra-cursor-caret-height)
 
-> Using a VS Code fork (Cursor, Windsurf, VSCodium)? Those pull extensions from **[Open VSX](https://open-vsx.org/)** or let you install the `.vsix` manually.
+> Using a VS Code fork (Cursor, Windsurf, VSCodium)? Those pull extensions from **[Open VSX](https://open-vsx.org/extension/shibbirweb/extra-cursor-caret-height)** or let you install the `.vsix` manually.
 
 ---
 
